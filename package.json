@@ -42,7 +42,5 @@
       "path": "cz-conventional-changelog"
     }
   },
-  "dependencies": {
-    "sort-nodes": "^0.1.1"
-  }
+  "dependencies": {}
 }

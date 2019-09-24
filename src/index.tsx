@@ -1,5 +1,4 @@
 import * as React from "react";
-import { sortNodes } from "sort-nodes";
 
 const Context = React.createContext<RefsContext>({
   nodes: [],
@@ -53,14 +52,9 @@ export const RefProvider: React.FC = ({ children }) => {
   return <Context.Provider value={context}>{children}</Context.Provider>;
 };
 
-// // returns function to get nodes in DOM order
-// export function useGetOrderedNodes(sorter = sortNodes) {
-//   const { nodes } = React.useContext(Context);
-
-//   // const refs = React.useMemo(() => )
-
-//   return () => sorter(Object.keys(nodes).map(k => nodes[k]));
-// }
+export function useNodes() {
+  return React.useContext(Context).nodes;
+}
 
 export function useRefs(tag?: string) {
   const { nodes } = React.useContext(Context);
