@@ -1,0 +1,17 @@
+{
+  "compilerOptions": {
+    "sourceMap": false,
+    "module": "commonjs",
+    "target": "es5",
+    "declaration": true,
+    "moduleResolution": "node",
+    "outDir": "./dist/",
+    "lib": ["es2015", "es5", "dom"],
+    "jsx": "react",
+    "esModuleInterop": true,
+    "noImplicitAny": true,
+    "noImplicitReturns": true,
+    "noImplicitThis": true
+  },
+  "files": ["src/index.tsx"]
+}

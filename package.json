@@ -1,0 +1,48 @@
+{
+  "name": "react-context-refs",
+  "version": "0.0.1",
+  "description": "Library to manipulate react refs via context.",
+  "main": "dist/index.js",
+  "module": "dist-es/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc && tsc -p tsconfig.es.json",
+    "version": "npm run build && conventional-changelog -p angular -i CHANGELOG.md -s -r 0 && git add CHANGELOG.md",
+    "commit": "git-cz",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "react",
+    "context",
+    "ref"
+  ],
+  "author": "megazazik <megazazik@rambler.ru>",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/react": "^16.9.2",
+    "@types/react-dom": "^16.9.0",
+    "commitizen": "^4.0.3",
+    "conventional-changelog-cli": "^2.0.23",
+    "cz-conventional-changelog": "^3.0.2",
+    "react": "^16.9.0",
+    "react-dom": "^16.9.0",
+    "typescript": "^3.6.3"
+  },
+  "peerDependencies": {
+    "react": "^16.8.0",
+    "react-dom": "^16.8.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/megazazik/react-context-refs.git"
+  },
+  "homepage": "https://github.com/megazazik/react-context-refs",
+  "config": {
+    "commitizen": {
+      "path": "cz-conventional-changelog"
+    }
+  },
+  "dependencies": {
+    "sort-nodes": "^0.1.1"
+  }
+}
