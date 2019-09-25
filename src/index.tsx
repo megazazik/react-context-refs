@@ -2,17 +2,19 @@ import * as React from "react";
 
 const Context = React.createContext<RefsContext>({
   nodes: [],
-  register: () => {}
+  register: () => {},
+  setMeta: () => {}
 });
 
 interface RefsContext {
   nodes: RefData[];
   register: (key: any, ref?: RefData) => void;
+  setMeta: (key: any, meta: any) => void;
 }
 
 export interface RefData {
   value: any;
-  tag?: string;
+  meta: any;
 }
 
 export const RefProvider: React.FC = ({ children }) => {
@@ -31,7 +33,7 @@ export const RefProvider: React.FC = ({ children }) => {
         const oldRefData = refs.get(key) || ({} as RefData);
         if (
           oldRefData.value !== refData.value ||
-          oldRefData.tag !== refData.tag
+          oldRefData.meta !== refData.meta
         ) {
           refs.set(key, refData);
           setNodes(Array.from(refs.values()));
@@ -41,10 +43,25 @@ export const RefProvider: React.FC = ({ children }) => {
     [setNodes]
   );
 
+  const setMeta = React.useCallback<RefsContext["setMeta"]>(
+    (key, meta) => {
+      if (!refs.has(key)) {
+        return;
+      }
+      const refData = refs.get(key);
+      if (!refData) {
+        return;
+      }
+      refData.meta = meta;
+    },
+    [setNodes]
+  );
+
   const context = React.useMemo(
     () => ({
       nodes,
-      register
+      register,
+      setMeta
     }),
     [nodes, register]
   );
@@ -56,43 +73,42 @@ export function useNodes() {
   return React.useContext(Context).nodes;
 }
 
-export function useRefs(tag?: string) {
-  const { nodes } = React.useContext(Context);
+/** @todo переделать на getNodesByType ? */
+// export function useRefs(tag?: string) {
+//   const { nodes } = React.useContext(Context);
 
-  return React.useMemo(
-    () =>
-      tag
-        ? nodes.filter(node => node.tag === tag).map(node => node.value)
-        : nodes.map(node => node.value),
-    [nodes, tag]
-  );
-}
+//   return React.useMemo(
+//     () =>
+//       tag
+//         ? nodes.filter(node => node.tag === tag).map(node => node.value)
+//         : nodes.map(node => node.value),
+//     [nodes, tag]
+//   );
+// }
 
-export interface RegisterRefParams {
-  tag?: string;
-  add?: boolean;
-}
-
-export function useSetRef({ add = true, tag }: RegisterRefParams = {}) {
+export function useSetRef(meta?: any) {
   const { current: key } = React.useRef({});
 
-  const { register } = React.useContext(Context);
+  const { register, setMeta } = React.useContext(Context);
 
   const callback = React.useCallback(
     node => {
-      register(key, node && add ? { value: node, tag: tag } : null);
+      register(key, node ? { value: node, meta } : null);
     },
-    [add, tag, register]
+    [register, meta]
   );
+
+  React.useLayoutEffect(() => {
+    setMeta(key, meta);
+  }, [meta]);
 
   return callback;
 }
 
-export function ContextRef(
-  props: RegisterRefParams & {
-    children: (ref: (value: any) => void) => React.ReactNode;
-  }
-) {
-  const setRef = useSetRef({ add: props.add, tag: props.tag });
+export function ContextRef(props: {
+  children: (ref: (value: any) => void) => React.ReactNode;
+  meta?: any;
+}) {
+  const setRef = useSetRef(props.meta);
   return props.children(setRef);
 }
