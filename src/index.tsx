@@ -95,10 +95,10 @@ export function useSetRef(meta?: any) {
     node => {
       register(key, node ? { value: node, meta } : null);
     },
-    [register, meta]
+    [register]
   );
 
-  React.useLayoutEffect(() => {
+  React.useEffect(() => {
     setMeta(key, meta);
   }, [meta]);
 
