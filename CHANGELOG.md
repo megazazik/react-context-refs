@@ -1,3 +1,12 @@
+## [0.1.1-beta.1](https://github.com/megazazik/react-context-refs/compare/v0.1.1-beta.0...v0.1.1-beta.1) (2019-09-25)
+
+
+### Bug Fixes
+
+* fix react depth call stack bug ([6d9d9d7](https://github.com/megazazik/react-context-refs/commit/6d9d9d7))
+
+
+
 ## [0.1.1-beta.0](https://github.com/megazazik/react-context-refs/compare/v0.1.1...v0.1.1-beta.0) (2019-09-25)
 
 
