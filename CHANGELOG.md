@@ -1,3 +1,7 @@
+# [0.2.0](https://github.com/megazazik/react-context-refs/compare/v0.1.1-beta.3...v0.2.0) (2019-09-26)
+
+
+
 ## [0.1.1-beta.3](https://github.com/megazazik/react-context-refs/compare/v0.1.1-beta.2...v0.1.1-beta.3) (2019-09-26)
 
 
