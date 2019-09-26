@@ -42,5 +42,12 @@
       "path": "cz-conventional-changelog"
     }
   },
-  "dependencies": {}
+  "dependencies": {},
+  "files": [
+    "dist",
+    "dist-es",
+    "declarations",
+    "CHANGELOG.md",
+    "README.md"
+  ]
 }

@@ -1,8 +1,6 @@
 declare module ReactContextRefs {
   export interface Refs {
-    myTest: { current: Element; meta: { hasError: boolean } };
-    test2: { current: number; meta: { p: number } };
-    [""]: { current: any; type: ""; meta: any };
+    [""]: { current: any; meta: any };
   }
 
   export type RefType = keyof Refs;
