@@ -1,3 +1,12 @@
+## [0.1.1-beta.2](https://github.com/megazazik/react-context-refs/compare/v0.1.1-beta.1...v0.1.1-beta.2) (2019-09-26)
+
+
+### Features
+
+* **index:** add refs type ([8150588](https://github.com/megazazik/react-context-refs/commit/8150588))
+
+
+
 ## [0.1.1-beta.1](https://github.com/megazazik/react-context-refs/compare/v0.1.1-beta.0...v0.1.1-beta.1) (2019-09-25)
 
 
