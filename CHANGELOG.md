@@ -1,3 +1,12 @@
+## [0.1.1-beta.3](https://github.com/megazazik/react-context-refs/compare/v0.1.1-beta.2...v0.1.1-beta.3) (2019-09-26)
+
+
+### Bug Fixes
+
+* remove excess code, fix publish settings ([9ed06aa](https://github.com/megazazik/react-context-refs/commit/9ed06aa))
+
+
+
 ## [0.1.1-beta.2](https://github.com/megazazik/react-context-refs/compare/v0.1.1-beta.1...v0.1.1-beta.2) (2019-09-26)
 
 
