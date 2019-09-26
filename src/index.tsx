@@ -1,114 +1,128 @@
+///<reference path="../declarations/index.d.ts" />
 import * as React from "react";
 
+type RefsData = ReactContextRefs.RefsData;
+
 const Context = React.createContext<RefsContext>({
-  nodes: [],
+  refs: [],
   register: () => {},
   setMeta: () => {}
 });
 
 interface RefsContext {
-  nodes: RefData[];
-  register: (key: any, ref?: RefData) => void;
+  refs: RefsData[];
+  register: (key: any, ref?: RefsData) => void;
   setMeta: (key: any, meta: any) => void;
 }
 
-export interface RefData {
-  value: any;
-  meta: any;
-}
-
 export const RefProvider: React.FC = ({ children }) => {
-  const { current: refs } = React.useRef<Map<any, RefData>>(new Map());
+  const { current: refsMap } = React.useRef<Map<any, RefsData>>(new Map());
 
-  const [nodes, setNodes] = React.useState<RefData[]>([]);
+  const [refs, setRefs] = React.useState<RefsData[]>([]);
 
   const register = React.useCallback<RefsContext["register"]>(
     (key, refData) => {
       if (refData == null) {
-        if (refs.has(key)) {
-          refs.delete(key);
-          setNodes(Array.from(refs.values()));
+        if (refsMap.has(key)) {
+          refsMap.delete(key);
+          setRefs(Array.from(refsMap.values()));
         }
       } else {
-        const oldRefData = refs.get(key) || ({} as RefData);
+        const oldRefData = refsMap.get(key) || ({} as RefsData);
         if (
-          oldRefData.value !== refData.value ||
-          oldRefData.meta !== refData.meta
+          oldRefData.current !== refData.current ||
+          oldRefData.meta !== refData.meta ||
+          oldRefData.type !== refData.type
         ) {
-          refs.set(key, refData);
-          setNodes(Array.from(refs.values()));
+          refsMap.set(key, refData);
+          setRefs(Array.from(refsMap.values()));
         }
       }
     },
-    [setNodes]
+    [setRefs]
   );
 
   const setMeta = React.useCallback<RefsContext["setMeta"]>(
     (key, meta) => {
-      if (!refs.has(key)) {
+      if (!refsMap.has(key)) {
         return;
       }
-      const refData = refs.get(key);
+      const refData = refsMap.get(key);
       if (!refData) {
         return;
       }
       refData.meta = meta;
     },
-    [setNodes]
+    [setRefs]
   );
 
   const context = React.useMemo(
     () => ({
-      nodes,
+      refs,
       register,
       setMeta
     }),
-    [nodes, register]
+    [refs, register]
   );
 
   return <Context.Provider value={context}>{children}</Context.Provider>;
 };
 
-export function useNodes() {
-  return React.useContext(Context).nodes;
+export function useRefs(): RefsData[];
+export function useRefs<T extends ReactContextRefs.RefType>(
+  type: T
+): Array<ReactContextRefs.RefsValuesMap[T]>;
+export function useRefs<T extends ReactContextRefs.RefType>(type?: T) {
+  const { refs } = React.useContext(Context);
+
+  if (typeof type === "undefined") {
+    return refs;
+  }
+
+  return refs.filter(ref => ref.type === type);
 }
 
-/** @todo переделать на getNodesByType ? */
-// export function useRefs(tag?: string) {
-//   const { nodes } = React.useContext(Context);
+const useIsomorphicLayoutEffect =
+  typeof window !== "undefined" &&
+  typeof window.document !== "undefined" &&
+  typeof window.document.createElement !== "undefined"
+    ? React.useLayoutEffect
+    : React.useEffect;
 
-//   return React.useMemo(
-//     () =>
-//       tag
-//         ? nodes.filter(node => node.tag === tag).map(node => node.value)
-//         : nodes.map(node => node.value),
-//     [nodes, tag]
-//   );
-// }
+export function useContextRef(meta?: any): (value: any) => void;
+export function useContextRef<T extends ReactContextRefs.RefType>(
+  type: T,
+  meta: ReactContextRefs.RefsValuesMap[T]["meta"]
+): (value: ReactContextRefs.RefsValuesMap[T]["current"]) => void;
+export function useContextRef(typeParam: any, metaParam?: any) {
+  const type = typeof metaParam === "undefined" ? "" : typeParam;
+  const meta = typeof metaParam === "undefined" ? typeParam : metaParam;
 
-export function useSetRef(meta?: any) {
   const { current: key } = React.useRef({});
 
   const { register, setMeta } = React.useContext(Context);
 
   const callback = React.useCallback(
-    node => {
-      register(key, node ? { value: node, meta } : null);
+    current => {
+      register(key, current ? { current, meta, type } : null);
     },
     [register]
   );
 
-  React.useEffect(() => {
+  useIsomorphicLayoutEffect(() => {
     setMeta(key, meta);
   }, [meta]);
 
   return callback;
 }
 
-export function ContextRef(props: {
-  children: (ref: (value: any) => void) => React.ReactNode;
-  meta?: any;
+export function ContextRef<T extends ReactContextRefs.RefType = "">(props: {
+  children: (
+    ref: (current: ReactContextRefs.RefsValuesMap[T]["current"]) => void
+  ) => React.ReactNode;
+  type?: T;
+  meta?: ReactContextRefs.RefsValuesMap[T]["meta"];
 }) {
-  const setRef = useSetRef(props.meta);
+  const setRef = useContextRef(props.type || "", props.meta);
   return props.children(setRef);
 }
