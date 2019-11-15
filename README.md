@@ -1,6 +1,6 @@
 # react-context-refs
 
-![npm](https://img.shields.io/npm/v/react-context-refs)
+[![npm version](https://badge.fury.io/js/react-context-refs.svg)](https://badge.fury.io/js/react-context-refs)
 
 Library to get react refs via context. For example it can be useful when you need to scroll or set focus to some field after form validation and you have a deep nested components hierarchy.
 
