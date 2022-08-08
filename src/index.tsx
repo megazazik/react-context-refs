@@ -15,7 +15,11 @@ interface RefsContext {
   setMeta: (key: any, meta: any) => void;
 }
 
-export const RefProvider: React.FC = ({ children }) => {
+type FCProps = {
+  children?: React.ReactNode
+};
+
+export const RefProvider: React.FC<FCProps> = ({ children }) => {
   const { current: refsMap } = React.useRef<Map<any, RefsData>>(new Map());
 
   const [refs, setRefs] = React.useState<RefsData[]>([]);
