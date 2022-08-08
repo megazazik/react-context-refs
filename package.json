@@ -21,16 +21,16 @@
   "devDependencies": {
     "@types/react": "^16.9.3",
     "@types/react-dom": "^16.9.0",
-    "commitizen": "^4.0.3",
-    "conventional-changelog-cli": "^2.0.23",
+    "commitizen": "^4.2.5",
+    "conventional-changelog-cli": "^2.2.2",
     "cz-conventional-changelog": "^3.0.2",
     "react": "^16.9.0",
     "react-dom": "^16.9.0",
     "typescript": "^3.6.3"
   },
   "peerDependencies": {
-    "react": "^16.8.0",
-    "react-dom": "^16.8.0"
+    "react": "^16.8.0 || ^17.0.0 || ^18.0.0",
+    "react-dom": "^16.8.0 || ^17.0.0 || ^18.0.0"
   },
   "repository": {
     "type": "git",
